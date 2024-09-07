@@ -1,0 +1,24 @@
+{{ define "clue" }}
+    {{ if . }}
+        <span id="clue" hx-ext="ws" style="color:{{ .Team }}">{{ .Word }} {{ .Number }}</span>
+    {{ else }}
+        <span id="clue" hx-ext="ws"></span>
+    {{ end }}
+{{ end }}
+
+{{ define "clue-form" }}
+<span id="clue" hx-ext="ws">
+        <input id="word" type="text" placeholder="Word">
+        <input id="number" type="number" placeholder="-">
+        <button ws-send
+                hx-vals='js:{
+                "playerID": document.getElementById("player-id").textContent,
+                "gameID": window.location.href.split("/")[4],
+                "word": document.getElementById("word").value,
+                "number": document.getElementById("number").valueAsNumber,
+                }'
+                hx-trigger="click"
+                hx-swap="outerHTML"
+                >Give a Clue</button>
+</span>
+{{ end }}

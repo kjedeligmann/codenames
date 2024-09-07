@@ -1,0 +1,46 @@
+{{ define "teams" }}
+<div id="teams">
+
+    <span style="color: blue">Blue</span>
+    {{ if .Blue.Operative }}
+        {{ template "player-joined" .Blue.Operative }}
+    {{ else }}
+        {{ template "button" (map "Team" "blue" "Role" "o") }}
+    {{ end }}
+    {{ if .Blue.Spymaster }}
+        {{ template "player-joined" .Blue.Spymaster }}
+    {{ else }}
+        {{ template "button" (map "Team" "blue" "Role" "s") }}
+    {{ end }}
+
+    <br>
+
+    <span style="color: red">Red</span>
+    {{ if .Red.Operative }}
+        {{ template "player-joined" .Red.Operative }}
+    {{ else }}
+        {{ template "button" (map "Team" "red" "Role" "o") }}
+    {{ end }}
+    {{ if .Red.Spymaster }}
+        {{ template "player-joined" .Red.Spymaster }}
+    {{ else }}
+        {{ template "button" (map "Team" "red" "Role" "s") }}
+    {{ end }}
+</div>
+{{ end }}
+
+{{ define "button" }}
+<div id="{{.Team}}{{.Role}}">
+    <button ws-send
+            hx-vals='js:{"gameID": window.location.href.split("/")[4], "team": "{{.Team}}", "role": "{{.Role}}"}'
+            hx-target="#{{.Team}}{{.Role}}"
+            hx-swap="outerHTML"
+            >Join as {{Role .Role}}</button>
+</div>
+{{ end }}
+
+{{ block "player-joined" . }}
+<div id="{{.Team}}{{.Role}}">
+    {{Role .Role}}: {{.Nickname}}
+</div>
+{{ end }}

@@ -1,0 +1,38 @@
+{{ define "board" }}
+<div id="board">
+    {{ $role := .Role }}
+    {{ $turn := .Turn }}
+    {{ range $i, $row := .Board}}
+    <div>
+        {{ range $j, $cell := $row }}
+        <button class="cell" id="cell{{$j}}-{{$i}}" style="background-color:{{ template "cell-color" (map "Cell" $cell "Role" $role) }}; {{ if and (eq $cell.Color "black") $cell.IsOpen }} color: white; {{ end }}"
+                {{ if and (eq $role "o") (and $turn (not $cell.IsOpen)) }}
+                    ws-send
+                    hx-vals='js:{
+                    "playerID": document.getElementById("player-id").textContent,
+                    "gameID": window.location.href.split("/")[4],
+                    "col": {{$j}},
+                    "row": {{$i}},
+                    }'
+                    hx-trigger="click"
+                    hx-swap="outerHTML"
+                {{ end }}>
+            {{ $cell.Word }}
+        </button>
+        {{ end }}
+    </div>
+    {{ end }}
+</div>
+{{ end }}
+
+{{ define "cell-color" }}
+    {{ if .Cell.IsOpen }}
+        {{ .Cell.Color }}
+    {{ else }}
+        {{ if eq .Role "s" }}
+            {{ .Cell.Color | printf "color-mix(in oklab, %s, beige)" | safe }}
+        {{ else }}
+            {{ "beige" }}
+        {{ end }}
+    {{ end }}
+{{ end }}

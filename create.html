@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Codenames</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- HTMX -->
+        <script src="/htmx/htmx.min.js"></script>
+        <script src="/htmx/ws.js"></script>
+        <style>
+        body {
+            text-align: center;
+            font-family: Helvetica, sans-serif;
+        }
+        </style>
+    </head>
+    <body>
+        <label for="wordlist">Choose a wordlist:</label>
+        <select hx-get="/wl" hx-trigger="load" hx-swap="outerHTML" id="wordlist"></select>
+        <button hx-post="/create" hx-target="#game-id" hx-include="[name='wordlist']">Create a Game</button>
+        <div id="game-id"></div>
+    </body>
+</html>

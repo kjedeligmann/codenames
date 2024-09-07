@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Codenames</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- HTMX -->
+        <script src="/htmx/htmx.min.js"></script>
+        <script src="/htmx/ws.js"></script>
+        <style>
+        body {
+            text-align: center;
+            font-family: Helvetica, sans-serif;
+        }
+        .cell {
+            width: 100px;
+            display: table-cell;
+            aspect-ratio: 4 / 3;
+            border: 1px solid #333;
+            /*font-size: clamp(12px, 1ch, 24px);*/
+            font-family: Helvetica, sans-serif;
+            overflow: hidden;
+            text-align: center;
+            vertical-align: middle;
+            margin-right: -1px;
+            margin-top: -1px;
+        }
+        </style>
+        <script>
+            // there is a problem with resizing going away after the first clue
+            //htmx.logAll();
+            window.addEventListener('DOMContentLoaded', function(){ 
+                document.body.addEventListener("htmx:oobAfterSwap", function(event) {
+                    if (event.detail.target.id === "board") {
+                        const cells = document.querySelectorAll('.cell');
+                        cells.forEach(cell => {
+                            const maxHeight = cell.offsetHeight; // Maximum height of the button
+                            let fontSize = 16; // Starting font size (in pixels)
+
+                            // Set initial font size
+                            cell.style.fontSize = `${fontSize}px`;
+                            cell.style.whiteSpace = 'normal'; // Allows line wrapping
+
+                            // Reduce font size until the content fits within the button height
+                            while ((cell.scrollHeight > maxHeight || cell.scrollWidth > cell.offsetWidth) && fontSize > 10) {
+                                fontSize -= 1;
+                                cell.style.fontSize = `${fontSize}px`;
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body hx-ext="ws" ws-connect="/join" ws-send hx-trigger="load" hx-vals='js:{"gameID": window.location.href.split("/")[4]}'>
+        <div id="player-id"></div>
+
+        {{ template "teams" . }}
+
+        <br>
+
+        {{ if .Begun }}
+            {{ template "board" (map "Role" "o" "Board" .Board) }}
+        {{ else }}
+            <div id="board"></div>
+        {{ end }}
+
+        <br>
+
+        {{ template "clue" .Clue }}
+
+        <span id="end-guessing"></span>
+
+        <div id="winner"></div>
+    </body>
+</html>
