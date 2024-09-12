@@ -3,7 +3,7 @@
 
 Server side is written in Go, using standard library for the most part (`net/http`, `html/template` etc). Gameplay is implemented using `gorilla/websocket` package.
 
-Frontend is in HTMX, so it is thin but relies heavily on the server, where user input is validated, rendered and an HTML response is sent back. 
+Frontend is in HTMX, so it is thin but relies heavily on the server, where user input is validated, processed and then an HTML response is rendered and sent back. 
 
 ## Setup
 
