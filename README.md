@@ -17,3 +17,8 @@ go build
 ```
 
 You should be able to access it on `localhost:3000` now. Go to `/` to create a game with your desired wordlist, then grab the `<game-id>` and switch to `/game/<game-id>` to join the game. The others can join or watch the game via the same link.
+
+![pic1](screenshots/pic1.jpg)
+![pic2](screenshots/pic2.jpg)
+![pic3](screenshots/pic3.jpg)
+![pic4](screenshots/pic4.jpg)
